@@ -20,7 +20,7 @@ const uploadSingle = promisify(upload.single('file'));
 export default async function handler(req, res) {
     if (req.method === 'POST') {
         try {
-
+            // Wrap multer's upload.single in a promise to properly handle async flow
             await uploadSingle(req, res);
 
             const document = req.file;
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
             });
 
             if (document) {
-
+                // Handle file upload and content generation
                 const uploadResponse = await fileManager.uploadFile(document.path, {
                     mimeType: document.mimetype,
                     displayName: document.originalname,
@@ -48,19 +48,19 @@ export default async function handler(req, res) {
                 ]);
 
                 const uri = uploadResponse.file.uri;
-                const mimeType = uploadResponse.file.mimeType;
+                const llmResponse = result.response.text();
 
-                res.status(200).json({ result: llmResponse, uri, prompt, mimeType });
+                // Send the response with result and uri
+                res.status(200).json({ result: llmResponse, uri, prompt });
             } else {
-
+                // Handle follow-up question if no file is uploaded
                 const followUpQuestion = req.body.prompt;
                 const uri = req.body.uri;
-                const mimeType = req.body.mimeType;
 
                 const resultFollowUp = await model.generateContent([
                     {
                         fileData: {
-                            mimeType: mimeType,
+                            mimeType: 'application/pdf',
                             fileUri: uri,
                         },
                     },
