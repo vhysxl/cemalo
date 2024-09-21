@@ -32,11 +32,11 @@ export const authOptions = {
                 const user = await User.findOne({ email })
 
                 if (!user) {
-                    throw new Error('User tidak ditemukan');
+                    throw new Error('User tidak ditemukan 😭');
                 }
 
                 if (password !== user.password || email !== user.email) {
-                    throw new Error('Password atau email tidak sesuai');
+                    throw new Error('Password dan email tidak sesuai 🤨');
                 }
 
                 return user;
