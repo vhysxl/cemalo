@@ -1,7 +1,5 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { User } from "/models/User";
-import { mongooseConnect } from "/lib/mongoose";
 
 export const authOptions = {
     providers: [
@@ -12,46 +10,27 @@ export const authOptions = {
     ],
     session: {
         strategy: 'jwt',
-        maxAge: 30 * 24 * 60 * 60,
+        maxAge: 30 * 24 * 60 * 60, // 30 days
     },
     callbacks: {
         async signIn({ user, account }) {
             if (account?.provider === 'google') {
-                try {
-                    console.log("Connecting to database...");
-                    await mongooseConnect();
-                    console.log("Database connected");
-
-                    console.log("Checking if user exists...");
-                    const userExist = await User.findOne({ email: user.email });
-                    if (!userExist) {
-                        console.log("User does not exist. Creating new user...");
-                        await User.create({
-                            name: user.name,
-                            email: user.email,
-                            avatar: user.image
-                        });
-                        console.log("New user created successfully");
-                    } else {
-                        console.log("User already exists");
-                    }
-                    return true;
-                } catch (error) {
-                    console.error("Sign-in error:", error);
-                    return false;
-                }
+                console.log("Google sign-in successful for:", user.email);
+                return true;
             }
-            return true;
+            return false; // Deny sign-ins for other providers
         },
         async jwt({ token, user, account }) {
             if (account && user) {
                 token.accessToken = account.access_token;
                 token.refreshToken = account.refresh_token;
+                token.userEmail = user.email;
             }
             return token;
         },
         async session({ session, token }) {
             session.user.accessToken = token.accessToken;
+            session.user.email = token.userEmail;
             return session;
         },
     },
