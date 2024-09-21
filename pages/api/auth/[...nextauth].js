@@ -1,9 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { User } from "/models/User";
-import { connectDB } from "/lib/mongoose";
-
-let dbConnected = false;
+import { mongooseConnect } from "/lib/mongoose";
 
 export const authOptions = {
     providers: [
@@ -20,18 +18,22 @@ export const authOptions = {
         async signIn({ user, account }) {
             if (account?.provider === 'google') {
                 try {
-                    if (!dbConnected) {
-                        await connectDB();
-                        dbConnected = true;
-                    }
+                    console.log("Connecting to database...");
+                    await mongooseConnect();
+                    console.log("Database connected");
+
+                    console.log("Checking if user exists...");
                     const userExist = await User.findOne({ email: user.email });
                     if (!userExist) {
-                        // Create user here instead of in session callback
+                        console.log("User does not exist. Creating new user...");
                         await User.create({
                             name: user.name,
                             email: user.email,
+                            avatar: user.image
                         });
                         console.log("New user created successfully");
+                    } else {
+                        console.log("User already exists");
                     }
                     return true;
                 } catch (error) {
