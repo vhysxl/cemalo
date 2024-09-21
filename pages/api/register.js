@@ -1,4 +1,4 @@
-import { mongooseConnect } from "/lib/mongoose";
+import { connectDB } from "/lib/mongoose";
 import User from "/models/User";
 
 export default async function handler(req, res) {
@@ -12,12 +12,12 @@ export default async function handler(req, res) {
             }
 
             // Connect to MongoDB
-            await mongooseConnect();
+            await connectDB();
 
             // Check if the email already exists
             const existingUser = await User.findOne({ email });
             if (existingUser) {
-                return res.status(400).json({ message: "Email already in use." });
+                return res.status(400).json({ message: "Email ini sudah terdaftar 😾" });
             }
 
             // Create the new user

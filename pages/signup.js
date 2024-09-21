@@ -11,12 +11,12 @@ export default function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!userName || !email || !password || !confirmPassword) {
-            setStatusMessage({ type: 'error', message: "Semua input harus diisi" });
+            setStatusMessage({ type: 'error', message: "Semua input harus diisi 😒" });
             return;
         }
 
         if (password !== confirmPassword) {
-            setStatusMessage({ type: 'error', message: "Password dan konfirmasi Password tidak sesuai!" });
+            setStatusMessage({ type: 'error', message: "Password dan konfirmasi Password tidak sesuai! 🤦‍♂️" });
             return;
         }
 
@@ -36,7 +36,7 @@ export default function SignUp() {
             if (res.ok) {
                 const form = e.target;
                 form.reset();
-                setStatusMessage({ type: 'success', message: "Sign Up berhasil, silakan login" });
+                setStatusMessage({ type: 'success', message: "Sign Up berhasil, silakan login 😎👍" });
             } else {
                 const data = await res.json();
                 setStatusMessage({ type: 'error', message: data.message });
