@@ -9,3 +9,5 @@
 
     // Check if the model already exists to prevent recompilation errors
     export const User = models.User || model("User", userSchema)
+
+    export default User;
