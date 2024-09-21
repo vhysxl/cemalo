@@ -49,18 +49,19 @@ export default async function handler(req, res) {
 
                 const uri = uploadResponse.file.uri;
                 const llmResponse = result.response.text();
-
+                const mimeType = uploadResponse.file.mimeType
                 // Send the response with result and uri
-                res.status(200).json({ result: llmResponse, uri, prompt });
+                res.status(200).json({ result: llmResponse, uri, prompt, mimeType });
             } else {
                 // Handle follow-up question if no file is uploaded
                 const followUpQuestion = req.body.prompt;
                 const uri = req.body.uri;
+                const mimeType = req.body.mimeType;
 
                 const resultFollowUp = await model.generateContent([
                     {
                         fileData: {
-                            mimeType: 'application/pdf',
+                            mimeType: mimeType,
                             fileUri: uri,
                         },
                     },
