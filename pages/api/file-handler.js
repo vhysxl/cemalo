@@ -50,8 +50,10 @@ export default async function handler(req, res) {
                 const uri = uploadResponse.file.uri;
                 const llmResponse = result.response.text();
                 const mimeType = uploadResponse.file.mimeType
+                const fileName = uploadResponse.file.displayName
+                
                 // Send the response with result and uri
-                res.status(200).json({ result: llmResponse, uri, prompt, mimeType });
+                res.status(200).json({ result: llmResponse, uri, prompt, mimeType, fileName });
             } else {
                 // Handle follow-up question if no file is uploaded
                 const followUpQuestion = req.body.prompt;

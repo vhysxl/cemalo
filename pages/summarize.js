@@ -1,5 +1,5 @@
 import Header from "./components/Header";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useActionState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { FaInfoCircle } from "react-icons/fa";
@@ -14,6 +14,7 @@ export default function Summarize() {
     const [prompt, setPrompt] = useState("");
     const [messages, setMessages] = useState([]);
     const [mimeType, setMimeType] = useState("");
+    const [conversations, setConversations] = useState([])
 
     const { data: session } = useSession();
 
@@ -34,7 +35,6 @@ export default function Summarize() {
         }
     });
 
-    // Scroll to last output
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
@@ -48,7 +48,7 @@ export default function Summarize() {
         this.style.height = "auto";
         this.style.height = this.scrollHeight + "px";
     }
-
+    //submit handler
     const handleSubmitFile = async (e) => {
         e.preventDefault();
         if (!prompt) {
@@ -84,7 +84,7 @@ export default function Summarize() {
             });
 
             const data = await response.json();
-            
+
 
             if (response.ok) {
                 setMessages((prevMessages) =>
@@ -118,6 +118,50 @@ export default function Summarize() {
         }
     };
 
+    console.log(session?.user);
+    console.log(messages);
+
+    //handle savechats
+    const saveChats = async (e) => {
+        e.preventDefault();
+        if (!messages) {
+            alert("tidak bisa menyimpan chat!");
+        }
+
+        if (!session) {
+            //kalo bisa mah ada alert dari react jgn alert js kek gini jelek wkwkkw
+            alert("login untuk dapat menyimpan chat");
+        }
+
+        try {
+            const response = await fetch('/api/savechats', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: session.user._id,
+                    fileUri,
+                    fileName,
+                    mimeType,
+                    conversations: messages.map(msg => ({
+                        prompt: msg.type === 'user' ? msg.content : null,
+                        result: msg.type === 'ai' ? msg.content : null
+                    })).filter(msg => msg.prompt || msg.result),
+                })
+            });
+
+            if (response.ok) {
+                alert("chat berhasil disimpan")
+            } else {
+                throw new Error("error bang")
+            }
+        } catch (error) {
+            console.error("Error saving chats: ", error)
+        }
+
+    }
+
     return (
         <>
             <Header />
@@ -136,8 +180,8 @@ export default function Summarize() {
                                 {messages.map((message, index) => (
                                     <div
                                         className={` ${message.type === "user"
-                                                ? "flex-row-reverse "
-                                                : ""
+                                            ? "flex-row-reverse "
+                                            : ""
                                             } w-full  flex gap-4 my-4`}
                                         key={index}
                                     >
@@ -157,8 +201,8 @@ export default function Summarize() {
                                         </div>
                                         <div
                                             className={` ${message.type === "user"
-                                                    ? "bg-blue-100 dark:bg-indigo-700 ml-auto"
-                                                    : "bg-gray-200 dark:bg-slate-800 mr-auto"
+                                                ? "bg-blue-100 dark:bg-indigo-700 ml-auto"
+                                                : "bg-gray-200 dark:bg-slate-800 mr-auto"
                                                 } w-fit h-fit max-w-[80%] sm:text-sm md:text-lg lg:text-base break-words rounded-3xl  p-4 shadow-md`}
                                         >
                                             {message.isLoading ? (
@@ -281,7 +325,13 @@ export default function Summarize() {
                                     <i className="bi bi-send"></i>
                                 </button>
                             </form>
+                            <button
+                                onClick={saveChats}
+                                className="border-2 border-cyan-500 ml-2 hover:bg-cyan-500 active:bg-cyan-500 px-3 text-base py-2 cursor-pointer text-slate-50 bg-slate-900 rounded-lg self-end mb-4 h-16">
+                                save
+                            </button>
                         </div>
+
                     </div>
                 </div>
             </main>

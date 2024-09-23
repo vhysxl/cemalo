@@ -21,8 +21,6 @@ export const authOptions = {
             }
         }),
 
-
-
         CredentialsProvider({
             async authorize(credentials) {
                 await connectDB();
@@ -49,57 +47,48 @@ export const authOptions = {
     },
     callbacks: {
         async signIn({ user, account }) {
+            await connectDB();
+            let dbUser;
+
             if (account?.provider === 'google') {
-                try {
-                    await connectDB();
-                    const userExist = await User.findOne({ email: user.email });
+                dbUser = await User.findOne({ email: user.email });
 
-                    if (!userExist) {
-                        console.log("New user signing in, will create account after successful authentication");
-                    }
-
-                    return true;
-                } catch (error) {
-                    console.error("Sign-in error:", error);
-                    return false;
+                if (!dbUser) {
+                    dbUser = await User.create({
+                        name: user.name,
+                        email: user.email,
+                    });
+                    console.log("New user created successfully");
                 }
+            } else {
+                dbUser = await User.findOne({ email: user.email });
             }
+
+            if (!dbUser) {
+                console.error("Failed to find or create user in database");
+                return false;
+            }
+
+            user._id = dbUser._id.toString();
             return true;
         },
+
         async jwt({ token, user, account }) {
-            if (account && user) {
+            if (user) {
+                token._id = user._id;
+            }
+            if (account) {
                 token.accessToken = account.access_token;
                 token.refreshToken = account.refresh_token;
-                token.isNewUser = !(await User.findOne({ email: user.email }));
             }
             return token;
         },
+
         async session({ session, token }) {
-            session.user.accessToken = token.accessToken;
-
-            if (token.isNewUser) {
-                try {
-                    const response = await fetch('/api/google', {
-                        method: 'POST',
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            name: session.user.name,
-                            email: session.user.email,
-                        })
-                    });
-
-                    if (!response.ok) {
-                        console.error("Failed to create new user:", await response.text());
-                    } else {
-                        console.log("New user created successfully");
-                    }
-                } catch (error) {
-                    console.error("Error creating new user:", error);
-                }
+            if (token._id) {
+                session.user._id = token._id;
             }
-
+            session.user.accessToken = token.accessToken;
             return session;
         },
     },
