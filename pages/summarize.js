@@ -225,7 +225,7 @@ export default function Summarize() {
                                 onSubmit={handleSubmitFile}
                                 className="w-[90%] sm:w-[70%] lg:w-[50%] mb-3 flex items-center h-fit px-6 text-slate-800 dark:text-slate-200 py-3 rounded-3xl bg-slate-200 dark:bg-slate-800"
                             >
-                                <div className=" mr-2 flex justify-center self-end">
+                                <div className=" mr-2 flex justify-center ">
                                     <div
                                         onClick={toggleVisibility}
                                         className="px-3 text-base py-2 cursor-pointer text-slate-50 bg-slate-900 rounded-full"

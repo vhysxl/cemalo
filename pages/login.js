@@ -135,7 +135,7 @@ const Login = () => {
                                         onClick={() => signIn('google')}
                                         className="w-full relative h-12 text-slate-900 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:scale-105 transition-all ease-in-out duration-300 shadow-lg p-5 rounded-lg m-1 flex items-center text-base"
                                     >
-                                        <div className="max-w-8 absolute">
+                                        <div className="max-w-6 md:max-w-8">
                                             <Image
                                                 src="/google.png"
                                                 width={500}
