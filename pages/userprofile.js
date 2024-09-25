@@ -20,10 +20,10 @@ export default function UserProfile() {
                                 <UserAvatar session={session} />
                             </div>
                             <div className="text-xl font-semibold">
-                                <span>{session.user.name}</span>
+                                <span>{session?.user?.name}</span>
                             </div>
                             <div className="text-lg font-medium">
-                                <span>{session.user.email}</span>
+                                <span>{session?.user?.email}</span>
                             </div>
                             <div className="mt-3">
                                 <span>Change Profile Picture</span>
