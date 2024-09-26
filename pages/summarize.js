@@ -117,9 +117,9 @@ export default function Summarize() {
                 prevMessages.map((msg, index) =>
                     index === prevMessages.length - 1
                         ? {
-                              type: "ai",
-                              content: `Error: ${`error saat membaca file, tolong jangan beri password dokumen anda dan pastikan gunakan format yang sesuai!`}`,
-                          }
+                            type: "ai",
+                            content: `Error: ${`error saat membaca file, tolong jangan beri password dokumen anda dan pastikan gunakan format yang sesuai!`}`,
+                        }
                         : msg
                 )
             );
@@ -201,11 +201,10 @@ export default function Summarize() {
                             <div className="w-full p-5 flex flex-col text-slate-900 dark:text-slate-200 break-words">
                                 {messages.map((message, index) => (
                                     <div
-                                        className={` ${
-                                            message.type === "user"
+                                        className={` ${message.type === "user"
                                                 ? "flex-row-reverse "
                                                 : ""
-                                        } w-full  flex gap-4 my-4`}
+                                            } w-full  flex gap-4 my-4`}
                                         key={index}
                                     >
                                         <div className=" w-14 h-14  overflow-hidden rounded-full bg-red-50">
@@ -213,8 +212,8 @@ export default function Summarize() {
                                                 src={
                                                     message.type === "user"
                                                         ? session?.user
-                                                              ?.image ??
-                                                          "/kucing2.png"
+                                                            ?.image ??
+                                                        "/kucing2.png"
                                                         : "/kucing2.png"
                                                 }
                                                 alt="Photo Profile"
@@ -224,11 +223,10 @@ export default function Summarize() {
                                             />
                                         </div>
                                         <div
-                                            className={` ${
-                                                message.type === "user"
+                                            className={` ${message.type === "user"
                                                     ? "bg-blue-100 dark:bg-indigo-700 ml-auto"
                                                     : "bg-gray-200 dark:bg-slate-800 mr-auto"
-                                            } w-fit h-fit max-w-[80%] sm:text-sm md:text-lg lg:text-base break-words rounded-3xl  p-4 shadow-md`}
+                                                } w-fit h-fit max-w-[80%] sm:text-sm md:text-lg lg:text-base break-words rounded-3xl  p-4 shadow-md`}
                                         >
                                             {message.isLoading ? (
                                                 <p>Loading...</p>
@@ -318,8 +316,8 @@ export default function Summarize() {
                                                         setFileName(
                                                             e.target.files[0]
                                                                 ? e.target
-                                                                      .files[0]
-                                                                      .name
+                                                                    .files[0]
+                                                                    .name
                                                                 : ""
                                                         );
                                                     }}

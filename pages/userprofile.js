@@ -5,6 +5,12 @@ import { useRouter } from "next/router";
 export default function UserProfile() {
     const { data: session } = useSession();
     const router = useRouter();
+
+    const submitAvatar = async (e) => {
+        e.preventDefault()
+        await fetch('/api/uploadavatar')
+    }
+
     return (
         <>
             <main className=" ">
@@ -31,6 +37,7 @@ export default function UserProfile() {
                             <form className="">
                                 <label htmlFor="userProfile" className="flex flex-col justify-center items-center rounded-full cursor-pointer border px-3 py-2 text-2xl"><i class="bi bi-plus-lg"></i></label>
                                 <input id="userProfile" type='file'  className="hidden"></input>
+                                <button onClick={submitAvatar} className="bg-red-600 p-4">upload</button>
                             </form>
                         </div>
                     </div>
