@@ -5,6 +5,15 @@ import ReactMarkdown from "react-markdown";
 import { FaInfoCircle } from "react-icons/fa";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import {
+    ToastContainer,
+    toast,
+    Slide,
+    Zoom,
+    Flip,
+    Bounce,
+} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Summarize() {
     const [isVisible, setIsVisible] = useState(false);
@@ -14,7 +23,7 @@ export default function Summarize() {
     const [prompt, setPrompt] = useState("");
     const [messages, setMessages] = useState([]);
     const [mimeType, setMimeType] = useState("");
-    const [conversations, setConversations] = useState([])
+    const [conversations, setConversations] = useState([]);
 
     const { data: session } = useSession();
 
@@ -52,11 +61,11 @@ export default function Summarize() {
     const handleSubmitFile = async (e) => {
         e.preventDefault();
         if (!prompt) {
-            return alert("Tolong masukan prompt!");
+            return toast.warn("Tolong masukan prompt!");
         }
 
         if (!file && !fileUri) {
-            return alert("Tolong masukan file pada pengiriman pertama!");
+            return toast.warn("Tolong masukan file pada pengiriman pertama!");
         }
 
         const formData = new FormData();
@@ -85,7 +94,6 @@ export default function Summarize() {
 
             const data = await response.json();
 
-
             if (response.ok) {
                 setMessages((prevMessages) =>
                     prevMessages.map((msg, index) =>
@@ -97,7 +105,7 @@ export default function Summarize() {
 
                 if (data.uri) {
                     setFileUri(data.uri);
-                    setMimeType(data.mimeType)
+                    setMimeType(data.mimeType);
                     setFile(null);
                 }
             } else {
@@ -109,9 +117,9 @@ export default function Summarize() {
                 prevMessages.map((msg, index) =>
                     index === prevMessages.length - 1
                         ? {
-                            type: "ai",
-                            content: `Error: ${`error saat membaca file, tolong jangan beri password dokumen anda dan pastikan gunakan format yang sesuai!`}`,
-                        }
+                              type: "ai",
+                              content: `Error: ${`error saat membaca file, tolong jangan beri password dokumen anda dan pastikan gunakan format yang sesuai!`}`,
+                          }
                         : msg
                 )
             );
@@ -125,46 +133,60 @@ export default function Summarize() {
     const saveChats = async (e) => {
         e.preventDefault();
         if (!messages) {
-            alert("tidak bisa menyimpan chat!");
+            return toast.error("tidak bisa menyimpan chat!");
         }
 
         if (!session) {
             //kalo bisa mah ada alert dari react jgn alert js kek gini jelek wkwkkw
-            alert("login untuk dapat menyimpan chat");
+            return toast.error("login untuk dapat menyimpan chat");
         }
 
         try {
-            const response = await fetch('/api/savechats', {
-                method: 'POST',
+            const response = await fetch("/api/savechats", {
+                method: "POST",
                 headers: {
-                    "Content-Type": 'application/json'
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     userId: session.user._id,
                     fileUri,
                     fileName,
                     mimeType,
-                    conversations: messages.map(msg => ({
-                        prompt: msg.type === 'user' ? msg.content : null,
-                        result: msg.type === 'ai' ? msg.content : null
-                    })).filter(msg => msg.prompt || msg.result),
-                })
+                    conversations: messages
+                        .map((msg) => ({
+                            prompt: msg.type === "user" ? msg.content : null,
+                            result: msg.type === "ai" ? msg.content : null,
+                        }))
+                        .filter((msg) => msg.prompt || msg.result),
+                }),
             });
 
             if (response.ok) {
-                alert("chat berhasil disimpan")
+                alert("chat berhasil disimpan");
             } else {
-                throw new Error("error bang")
+                throw new Error("error bang");
             }
         } catch (error) {
-            console.error("Error saving chats: ", error)
+            console.error("Error saving chats: ", error);
         }
-
-    }
+    };
 
     return (
         <>
             <Header />
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="light"
+                transition={Bounce}
+            />
             <main className="bg-slate-50 dark:bg-slate-950 min-h-screen">
                 <div className="container mx-auto flex justify-center">
                     <div className=" w-full flex justify-center">
@@ -179,17 +201,20 @@ export default function Summarize() {
                             <div className="w-full p-5 flex flex-col text-slate-900 dark:text-slate-200 break-words">
                                 {messages.map((message, index) => (
                                     <div
-                                        className={` ${message.type === "user"
-                                            ? "flex-row-reverse "
-                                            : ""
-                                            } w-full  flex gap-4 my-4`}
+                                        className={` ${
+                                            message.type === "user"
+                                                ? "flex-row-reverse "
+                                                : ""
+                                        } w-full  flex gap-4 my-4`}
                                         key={index}
                                     >
                                         <div className=" w-14 h-14  overflow-hidden rounded-full bg-red-50">
                                             <Image
                                                 src={
                                                     message.type === "user"
-                                                        ? (session?.user?.image ?? "/kucing2.png")
+                                                        ? session?.user
+                                                              ?.image ??
+                                                          "/kucing2.png"
                                                         : "/kucing2.png"
                                                 }
                                                 alt="Photo Profile"
@@ -197,13 +222,13 @@ export default function Summarize() {
                                                 height={500}
                                                 className="w-full h-full object-cover"
                                             />
-
                                         </div>
                                         <div
-                                            className={` ${message.type === "user"
-                                                ? "bg-blue-100 dark:bg-indigo-700 ml-auto"
-                                                : "bg-gray-200 dark:bg-slate-800 mr-auto"
-                                                } w-fit h-fit max-w-[80%] sm:text-sm md:text-lg lg:text-base break-words rounded-3xl  p-4 shadow-md`}
+                                            className={` ${
+                                                message.type === "user"
+                                                    ? "bg-blue-100 dark:bg-indigo-700 ml-auto"
+                                                    : "bg-gray-200 dark:bg-slate-800 mr-auto"
+                                            } w-fit h-fit max-w-[80%] sm:text-sm md:text-lg lg:text-base break-words rounded-3xl  p-4 shadow-md`}
                                         >
                                             {message.isLoading ? (
                                                 <p>Loading...</p>
@@ -293,8 +318,8 @@ export default function Summarize() {
                                                         setFileName(
                                                             e.target.files[0]
                                                                 ? e.target
-                                                                    .files[0]
-                                                                    .name
+                                                                      .files[0]
+                                                                      .name
                                                                 : ""
                                                         );
                                                     }}
@@ -327,11 +352,11 @@ export default function Summarize() {
                             </form>
                             <button
                                 onClick={saveChats}
-                                className="border-2 border-cyan-500 ml-2 hover:bg-cyan-500 active:bg-cyan-500 px-3 text-base py-2 cursor-pointer text-slate-50 bg-slate-900 rounded-lg self-end mb-4 h-16">
+                                className="border-2 border-cyan-500 ml-2 hover:bg-cyan-500 active:bg-cyan-500 px-3 text-base py-2 cursor-pointer text-slate-50 bg-slate-900 rounded-lg self-end mb-4 h-16"
+                            >
                                 save
                             </button>
                         </div>
-
                     </div>
                 </div>
             </main>
