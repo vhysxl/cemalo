@@ -126,9 +126,6 @@ export default function Summarize() {
         }
     };
 
-    console.log(session?.user);
-    console.log(messages);
-
     //handle savechats
     const saveChats = async (e) => {
         e.preventDefault();
