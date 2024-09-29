@@ -4,13 +4,14 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Image from "next/image";
+
 
 export default function UserProfile() {
     const { data: session, update } = useSession();
     const router = useRouter();
     const [file, setFile] = useState(null);
     const [url, setUrl] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const avatar = session?.user?.image || session?.user?.avatar;
     const avatarGoogle = avatar?.includes("https://lh3");
@@ -27,6 +28,8 @@ export default function UserProfile() {
             toast.warn("Session invalid! Please login first.");
             return;
         }
+
+        setIsLoading(true);
 
         const formData = new FormData();
         formData.append("file", file);
@@ -62,6 +65,8 @@ export default function UserProfile() {
         } catch (error) {
             console.error("Error uploading avatar:", error);
             toast.error("An error occurred while uploading the avatar");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -82,8 +87,12 @@ export default function UserProfile() {
                     </button>
                 </div>
                 <div className="w-full flex flex-col gap-4 items-center justify-center mb-3">
-                    <div className="w-40 h-40 border-2 rounded-full overflow-hidden">
-                        {url || avatar ? (
+                    <div className="w-40 h-40 border-2 rounded-full overflow-hidden relative">
+                        {isLoading ? (
+                            <div className="absolute inset-0 flex items-center justify-center bg-gray-200 bg-opacity-75">
+                                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                            </div>
+                        ) : url || avatar ? (
                             <img
                                 src={url || avatar}
                                 alt="User Avatar"
@@ -109,9 +118,15 @@ export default function UserProfile() {
                             <label htmlFor="userProfile" className="flex flex-col justify-center items-center rounded-full cursor-pointer border px-3 py-2 text-2xl">
                                 <i className="bi bi-plus-lg"></i>
                             </label>
-                            <form onSubmit={handleSubmitAvatar}>
+                            <form onSubmit={handleSubmitAvatar} className="flex flex-col items-center">
                                 <input accept=".jpeg,.png," id="userProfile" onChange={handleChange} type='file' className="hidden" />
-                                <button type="submit" className="bg-gray-600 text-white px-4 mt-2">Done</button>
+                                <button
+                                    type="submit"
+                                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 mt-2"
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'Uploading...' : 'Done'}
+                                </button>
                             </form>
                         </>
                     )}

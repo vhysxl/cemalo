@@ -57,7 +57,7 @@ export const authOptions = {
                     dbUser = await User.create({
                         name: user.name,
                         email: user.email,
-                        avatar: user.image, 
+                        avatar: user.image,
                     });
                     console.log("New user created successfully");
                 }
@@ -71,14 +71,14 @@ export const authOptions = {
             }
 
             user._id = dbUser._id.toString();
-            user.avatar = dbUser.avatar; 
+            user.avatar = dbUser.avatar;
             return true;
         },
 
         async jwt({ token, user, account }) {
             if (user) {
                 token._id = user._id;
-                token.avatar = user.avatar; 
+                token.avatar = user.avatar;
             }
             if (account) {
                 token.accessToken = account.access_token;
@@ -93,9 +93,11 @@ export const authOptions = {
             }
             session.user.accessToken = token.accessToken;
 
-            
-            if (token.avatar) {
-                session.user.avatar = token.avatar;
+            await connectDB();
+            const latestUserData = await User.findById(token._id).lean();
+
+            if (latestUserData) {
+                session.user.avatar = latestUserData.avatar;
             }
 
             return session;
