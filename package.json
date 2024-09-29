@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.5.0",
+    "@aws-sdk/client-s3": "^3.658.1",
     "@google/generative-ai": "^0.17.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",

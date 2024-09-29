@@ -27,7 +27,7 @@ export const authOptions = {
 
                 const { email, password } = credentials;
 
-                const user = await User.findOne({ email })
+                const user = await User.findOne({ email });
 
                 if (!user) {
                     throw new Error('User tidak ditemukan 😭');
@@ -57,6 +57,7 @@ export const authOptions = {
                     dbUser = await User.create({
                         name: user.name,
                         email: user.email,
+                        avatar: user.image, 
                     });
                     console.log("New user created successfully");
                 }
@@ -70,12 +71,14 @@ export const authOptions = {
             }
 
             user._id = dbUser._id.toString();
+            user.avatar = dbUser.avatar; 
             return true;
         },
 
         async jwt({ token, user, account }) {
             if (user) {
                 token._id = user._id;
+                token.avatar = user.avatar; 
             }
             if (account) {
                 token.accessToken = account.access_token;
@@ -89,6 +92,12 @@ export const authOptions = {
                 session.user._id = token._id;
             }
             session.user.accessToken = token.accessToken;
+
+            
+            if (token.avatar) {
+                session.user.avatar = token.avatar;
+            }
+
             return session;
         },
     },

@@ -31,6 +31,9 @@ export default function Summarize() {
         setIsVisible(!isVisible);
     };
 
+    console.log(session);
+    
+
     const bottomRef = useRef(null);
 
     useEffect(() => {
@@ -159,9 +162,9 @@ export default function Summarize() {
             });
 
             if (response.ok) {
-                alert("chat berhasil disimpan");
+                toast.done("chat berhasil disimpan");
             } else {
-                throw new Error("error bang");
+                toast.warn("mulai chat untuk bisa menyimpan 👌")
             }
         } catch (error) {
             console.error("Error saving chats: ", error);

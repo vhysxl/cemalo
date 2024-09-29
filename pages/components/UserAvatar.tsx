@@ -4,7 +4,7 @@ import { ReactElement } from "react";
 interface UserSession {
     user?: {
         image?: string;
-        
+        avatar?: string;
     };
 }
 
@@ -13,19 +13,15 @@ interface UserAvatarProps {
 }
 
 export default function UserAvatar({ session }: UserAvatarProps): ReactElement {
+    const avatarSrc = session?.user?.image || session?.user?.avatar || "https://cdn-icons-png.flaticon.com/512/6988/6988878.png";
+
     return (
-        <>
-            <Image
-                src={
-                    session?.user?.image ??
-                    "https://cdn-icons-png.flaticon.com/512/6988/6988878.png"
-                }
-                alt="User Avatar"
-                width={500}
-                height={500}
-                className="w-full h-full object-cover"
-            />
-        </>
+        <img
+            src={avatarSrc}
+            alt="User Avatar"
+            width={500}
+            height={500}
+            className="w-full h-full object-cover"
+        />
     );
 }
-
