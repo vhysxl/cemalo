@@ -13,6 +13,8 @@ export default async function handler(req, res) {
 
             // Connect to MongoDB
             await connectDB();
+            console.log("halo");
+            
 
             // Check if the email already exists
             const existingUser = await User.findOne({ email });
