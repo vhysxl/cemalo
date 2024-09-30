@@ -328,7 +328,7 @@ export default function Home() {
                         >
                             <button
                                 type="submit"
-                                className="w-full font-semibold text-slate-50 dark:text-slate-900 bg-blue-950 dark:bg-blue-50 py-3 px-8 rounded-full hover:opacity-80 hover:shadow-lg transition duration-300"
+                                className="w-full font-semibold text-slate-800 dark:text-slate-200 bg-blue-950 dark:bg-blue-50 py-3 px-8 rounded-full hover:opacity-80 hover:shadow-lg transition duration-300"
                             >
                                 Submit
                             </button>
@@ -339,7 +339,7 @@ export default function Home() {
                             <div id="btn-loading">
                                 <button
                                     type="button"
-                                    className="w-full font-semibold text-white bg-sky-400 flex justify-center items-center rounded-full px-8 py-3"
+                                    className="w-full font-semibold text-slate-800 dark:text-slate-200 flex justify-center items-center rounded-full px-8 py-3"
                                     disabled
                                 >
                                     <svg

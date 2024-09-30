@@ -35,12 +35,33 @@ export default function Header() {
     const [nav] = useState(link);
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const dropdownRef = useRef(null);
+    const buttonRef = useRef(null);
     const handleNavbar = () => {
         setIsNavOpen(!isNavOpen);
     };
     const profileVisibility = () => {
         setIsProfileOpen(!isProfileOpen);
     };
+
+    // To close when click outside selected area
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target) &&
+                buttonRef.current &&
+                !buttonRef.current.contains(event.target)
+            ) {
+                setIsProfileOpen(false);
+            }
+        };
+
+        window.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            window.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const { data: session } = useSession();
 
@@ -93,6 +114,7 @@ export default function Header() {
                                 <div className="relative z-10 flex flex-col items-center px-5 ">
                                     <div
                                         onClick={profileVisibility}
+                                        ref={buttonRef}
                                         className="w-10 h-10 rounded-full overflow-hidden hover:opacity-85 transition ease-in duration-150 cursor-pointer"
                                     >
                                         <UserAvatar session={session} />
@@ -115,6 +137,7 @@ export default function Header() {
                                                 transition={{
                                                     duration: 0.2,
                                                 }}
+                                                ref={dropdownRef}
                                                 className="absolute w-64 justify-center shadow-md bottom-0 mb-12 md:bottom-auto md:top-0 md:right-0 md:mt-12 rounded-3xl hover:opacity-80 text-slate-800 dark:text-slate-200  bg-slate-200 dark:bg-slate-800 p-5 flex flex-col gap-2"
                                             >
                                                 <div className="w-full text-xs text-center ">
