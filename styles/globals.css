@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .navbar-color {
+        @apply bg-white dark:bg-slate-900 bg-opacity-80 dark:bg-opacity-80 border-b  shadow-sm backdrop-blur-xl;
+    }
+    .hamburger-line {
+        @apply w-[30px] h-[2px] my-2 block bg-slate-900;
+    }
+    .hamburger-active > span:nth-child(1) {
+        @apply rotate-45;
+    }
+    .hamburger-active > span:nth-child(2) {
+        @apply scale-0;
+    }
+    .hamburger-active > span:nth-child(3) {
+        @apply -rotate-45;
+    }
+    .promptResult h1 {
+        @apply text-2xl font-bold mb-4;
+    }
+    .promptResult h2 {
+        @apply text-xl font-semibold mb-3;
+    }
+
+    .promptResult h3 {
+        @apply text-lg font-medium mb-2;
+    }
+
+    .promptResult ul, .promptResult ol {
+        @apply pl-5 mb-4;
+    }
+
+    .promptResult li {
+        @apply mb-2;
+    }
+
+    .promptResult code {
+        @apply bg-gray-100 text-sm p-1 rounded;
+    }
+
+    .promptResult pre {
+        @apply bg-gray-100 p-4 rounded overflow-x-auto;
+    }
+
+    .promptResult ul {
+        @apply list-disc pl-5;
+    }
+
+    .promptResult p {
+        @apply mb-2;
+    }
+
+}
+
+* {
+    @apply transition-colors duration-100;
+}

@@ -46,7 +46,7 @@ export default function UserProfile() {
                 console.log(data);
                 toast.success("Avatar uploaded successfully!");
 
-                // Update the session with the new avatar URL
+               
                 await update({
                     ...session,
                     user: {
@@ -55,7 +55,7 @@ export default function UserProfile() {
                     },
                 });
 
-                // Update the local URL state
+                
                 setUrl(data.url);
             } else {
                 toast.error(data.msg || "Failed to upload avatar");
