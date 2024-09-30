@@ -11,6 +11,7 @@ export default function UserProfile() {
     const [file, setFile] = useState(null);
     const [url, setUrl] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [avatarStatus, setAvatarStatus] = useState(false);
 
     const avatar = session?.user?.image || session?.user?.avatar;
     const avatarGoogle = avatar?.includes("https://lh3");
@@ -43,10 +44,8 @@ export default function UserProfile() {
             const data = await response.json();
 
             if (response.ok) {
-                console.log(data);
                 toast.success("Avatar uploaded successfully!");
-
-               
+                setAvatarStatus(true)
                 await update({
                     ...session,
                     user: {
@@ -55,7 +54,6 @@ export default function UserProfile() {
                     },
                 });
 
-                
                 setUrl(data.url);
             } else {
                 toast.error(data.msg || "Failed to upload avatar");
@@ -72,8 +70,8 @@ export default function UserProfile() {
         const selectedFile = e.target.files[0];
         setFile(selectedFile);
         const url = URL.createObjectURL(selectedFile);
-        console.log(url);
         setUrl(url);
+        setAvatarStatus(false)
     };
 
     return (
@@ -134,13 +132,15 @@ export default function UserProfile() {
                                     type="file"
                                     className="hidden"
                                 />
-                                <button
-                                    type="submit"
-                                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 mt-2"
-                                    disabled={isLoading}
-                                >
-                                    {isLoading ? "Uploading..." : "Done"}
-                                </button>
+                                {avatarStatus === false && (
+                                    <button
+                                        type="submit"
+                                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 mt-2"
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? "Uploading..." : "Done"}
+                                    </button>
+                                )}
                             </form>
                         </>
                     )}
