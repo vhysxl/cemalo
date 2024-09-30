@@ -63,7 +63,7 @@ export default function Home() {
                         className="container h-screen mx-auto flex justify-center items-center overflow-hidden p-4"
                     >
                         <div className="font-black">
-                            <div className="text-6xl">
+                            <div className="text-6xl text-slate-800 dark:text-slate-200">
                                 Let&apos;s{" "}
                                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-500">
                                     Summarize
@@ -77,7 +77,7 @@ export default function Home() {
                             <div className="py-7 text-center">
                                 <Link
                                     href="/summarize"
-                                    className="text-lg bg-blue-950 text-slate-50 dark:text-slate-900 dark:bg-blue-50 border px-5 py-3 rounded-3xl"
+                                    className="text-lg bg-blue-950  text-slate-200 dark:text-slate-800 dark:bg-blue-50 border px-5 py-3 rounded-3xl"
                                 >
                                     Go Summarize
                                 </Link>

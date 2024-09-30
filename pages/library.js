@@ -45,9 +45,7 @@ export default function Library() {
                                             {session?.user?.name} 👋
                                         </span>{" "}
                                     </p>
-                                    <p>
-                                        <History history={history} />
-                                    </p>
+                                    <History history={history} />
                                 </div>
                             ) : (
                                 <div className="w-full p-5 flex flex-col gap-y-5 text-slate-900 dark:text-slate-200 break-words items-center justify-center">

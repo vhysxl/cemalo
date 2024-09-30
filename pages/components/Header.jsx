@@ -119,6 +119,7 @@ export default function Header() {
                                     >
                                         <UserAvatar session={session} />
                                     </div>
+                                    {/* Profile Dropdown */}
                                     <AnimatePresence>
                                         {isProfileOpen && (
                                             <motion.div
@@ -148,7 +149,7 @@ export default function Header() {
                                                 <hr className="border-slate-800 dark:border-slate-200" />
                                                 <div className="w-full flex">
                                                     <Link
-                                                        className="w-full px-2 py-3 flex items-center"
+                                                        className="w-full px-2 py-3 flex items-center hover:opacity-75"
                                                         href="/userprofile"
                                                     >
                                                         <i className="bi bi-person-fill text-2xl"></i>
@@ -160,7 +161,7 @@ export default function Header() {
 
                                                 <div className="w-full flex ">
                                                     <div
-                                                        className="w-full px-2 py-3 cursor-pointer flex items-center"
+                                                        className="w-full px-2 py-3 cursor-pointer flex items-center hover:opacity-75"
                                                         onClick={() =>
                                                             signOut("google")
                                                         }
@@ -202,8 +203,8 @@ function Navigation({ nav }) {
                 <Link
                     className={`${
                         activeNav === navs.id
-                            ? "text-slate-50 dark:text-slate-950 bg-blue-950 dark:bg-blue-50"
-                            : " text-slate-900 dark:text-slate-50"
+                            ? "text-slate-200 dark:text-slate-800 bg-blue-950 dark:bg-blue-50"
+                            : " text-slate-800 dark:text-slate-200"
                     }  relative px-5 py-2 mx-2 rounded-3xl hover:opacity-75 transition ease-in duration-150 `}
                     key={navs.id}
                     href={navs.id}
