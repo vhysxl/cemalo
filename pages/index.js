@@ -328,7 +328,7 @@ export default function Home() {
                         >
                             <button
                                 type="submit"
-                                className="w-full font-semibold text-slate-800 dark:text-slate-200 bg-blue-950 dark:bg-blue-50 py-3 px-8 rounded-full hover:opacity-80 hover:shadow-lg transition duration-300"
+                                className="w-full font-semibold  text-slate-200 dark:text-slate-800 bg-blue-950 dark:bg-blue-50 py-3 px-8 rounded-full hover:opacity-80 hover:shadow-lg transition duration-300"
                             >
                                 Submit
                             </button>

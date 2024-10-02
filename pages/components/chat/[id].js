@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
-import Header from '../Header';
+import React, { useEffect, useState, useRef } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import Header from "../Header";
 import ReactMarkdown from "react-markdown";
 import Image from "next/image";
 import {
@@ -29,16 +29,18 @@ export default function Chats() {
             try {
                 const res = await fetch(`/api/chats/${id}`);
                 if (!res.ok) {
-                    throw new Error("Failed to fetch chats")
+                    throw new Error("Failed to fetch chats");
                 }
                 const chatData = await res.json();
                 setFileUri(chatData.fileUri);
                 setFileName(chatData.fileName);
                 setMimeType(chatData.mimeType);
-                setMessages(chatData.conversations.map(conv => ({
-                    type: conv.prompt ? 'user' : 'ai',
-                    content: conv.prompt || conv.result
-                })));
+                setMessages(
+                    chatData.conversations.map((conv) => ({
+                        type: conv.prompt ? "user" : "ai",
+                        content: conv.prompt || conv.result,
+                    }))
+                );
             } catch (error) {
                 console.log("error fetching chats", error);
             }
@@ -102,22 +104,34 @@ export default function Chats() {
             <Header />
             <main className="bg-slate-50 dark:bg-slate-950 min-h-screen">
                 <div className="container mx-auto flex justify-center">
-                    <div className="w-full flex justify-center">
-                        <div className="mt-16 w-[90%] sm:w-[70%] lg:w-[50%] flex flex-col items-center justify-center mb-16">
+                    <div className="w-full flex justify-center text-sm md:text-base">
+                        <div className="mt-16  w-full sm:w-[90%] md:w-[70%] lg:w-[50%] flex flex-col items-center justify-center mb-16">
                             {fileName && (
-                                <div className="w-fit bg-blue-950 text-white p-2 mb-2 rounded-lg">
-                                    {fileName}
+                                <div className="max-w-full px-2 overflow-hidden">
+                                    <p className=" bg-blue-950 text-slate-200 p-3 mb-2 mx-2 rounded-lg break-words">
+                                        {fileName}
+                                    </p>
                                 </div>
                             )}
                             <div className="w-full p-5 flex flex-col text-slate-900 dark:text-slate-200 break-words">
                                 {messages.map((message, index) => (
                                     <div
-                                        className={`${message.type === "user" ? "flex-row-reverse " : ""} w-full flex gap-4 my-4`}
+                                        className={`${
+                                            message.type === "user"
+                                                ? "flex-row-reverse "
+                                                : ""
+                                        } w-full flex gap-4 my-4`}
                                         key={index}
                                     >
-                                        <div className="w-14 h-14 overflow-hidden rounded-full bg-red-50">
+                                        <div className="w-11 h-11 md:w-14 md:h-14 overflow-hidden rounded-full bg-red-50">
                                             <Image
-                                                src={message.type === "user" ? session?.user?.image ?? "/kucing2.png" : "/kucing2.png"}
+                                                src={
+                                                    message.type === "user"
+                                                        ? session?.user
+                                                              ?.image ??
+                                                          "/kucing2.png"
+                                                        : "/kucing2.png"
+                                                }
                                                 alt="Photo Profile"
                                                 width={500}
                                                 height={500}
@@ -125,7 +139,11 @@ export default function Chats() {
                                             />
                                         </div>
                                         <div
-                                            className={`${message.type === "user" ? "bg-blue-100 dark:bg-indigo-700 ml-auto" : "bg-gray-200 dark:bg-slate-800 mr-auto"} w-fit h-fit max-w-[80%] sm:text-sm md:text-lg lg:text-base break-words rounded-3xl p-4 shadow-md`}
+                                            className={`${
+                                                message.type === "user"
+                                                    ? "bg-blue-100 dark:bg-indigo-700 ml-auto"
+                                                    : "bg-gray-200 dark:bg-slate-800 mr-auto"
+                                            } w-fit h-fit max-w-[80%]  break-words rounded-3xl p-4 shadow-md`}
                                         >
                                             {message.isLoading ? (
                                                 <p>Loading...</p>
@@ -169,5 +187,5 @@ export default function Chats() {
                 </div>
             </main>
         </>
-    )
+    );
 }

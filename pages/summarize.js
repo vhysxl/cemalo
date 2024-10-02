@@ -191,12 +191,15 @@ export default function Summarize() {
             <Header />
             <main className="bg-slate-50 dark:bg-slate-950 min-h-screen">
                 <div className="container mx-auto flex justify-center">
-                    <div className=" w-full flex justify-center">
+                    <div className=" w-full flex justify-center text-sm md:text-base">
                         {/* Text Output */}
                         <div className="mt-16 w-full sm:w-[90%] md:w-[70%] lg:w-[50%] flex flex-col items-center justify-center mb-16">
                             {fileName && (
-                                <div className="w-fit bg-blue-950 text-white p-2 mb-2 rounded-lg">
-                                    {fileName}
+                                <div className="max-w-full px-2 overflow-hidden">
+                                    <p className=" bg-blue-950 text-slate-200 p-3 mb-2 mx-2 rounded-lg break-words">
+                                        {fileName}
+                                    </p>
+                                    
                                 </div>
                             )}
                             {/* Output Media */}
@@ -230,7 +233,7 @@ export default function Summarize() {
                                                 message.type === "user"
                                                     ? "bg-blue-100 dark:bg-indigo-700 ml-auto"
                                                     : "bg-gray-200 dark:bg-slate-800 mr-auto"
-                                            } w-fit h-fit max-w-[80%] sm:text-sm md:text-lg lg:text-base break-words rounded-3xl  p-4 shadow-md`}
+                                            } w-fit h-fit max-w-[80%] break-words rounded-3xl p-4 shadow-md`}
                                         >
                                             {message.isLoading ? (
                                                 <div id="btn-loading">

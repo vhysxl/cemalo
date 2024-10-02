@@ -2,6 +2,7 @@ import { Suspense, useEffect, useState } from "react";
 import Header from "./components/Header";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import Skeleton from "./components/Skeleton";
 
 export default function Library() {
     const [history, setHistory] = useState([]);
@@ -45,7 +46,15 @@ export default function Library() {
                                             {session?.user?.name} 👋
                                         </span>{" "}
                                     </p>
-                                    <History history={history} />
+                                    {history.length > 0 ? (
+                                        <History history={history} />
+                                    ) : (
+                                        Array(5)
+                                            .fill()
+                                            .map((_, index) => (
+                                                <Skeleton key={index} />
+                                            ))
+                                    )}
                                 </div>
                             ) : (
                                 <div className="w-full p-5 flex flex-col gap-y-5 text-slate-900 dark:text-slate-200 break-words items-center justify-center">
